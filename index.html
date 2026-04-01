@@ -212,57 +212,65 @@ cursor:pointer;
 
 </div>
 
-<script>
+ <script>
 
-const smartLink="https://smart-link-2gv.pages.dev/";
+const smartLink = "https://www.profitablecpmratenetwork.com/mq2h6va2g?key=84fd8af9fbf4199827f781b89631e3d7";
 
 function openExternal(){
 
-const ua = navigator.userAgent.toLowerCase();
+  const ua = navigator.userAgent.toLowerCase();
 
-const isAndroid = ua.indexOf("android") > -1;
-const isIOS = /iphone|ipad|ipod/.test(ua);
+  const isAndroid = /android/.test(ua);
+  const isIOS = /iphone|ipad|ipod/.test(ua);
+  const isTelegram = /telegram/.test(ua);
 
-if(isAndroid){
+  // ✅ TELEGRAM IN-APP (MOST IMPORTANT)
+  if(isTelegram){
+    window.location.href = smartLink;
+    return;
+  }
 
-// Android → open Chrome
-window.location.href =
-"intent://" +
-smartLink.replace(/^https?:\/\//,'') +
-"#Intent;scheme=https;package=com.android.chrome;end";
+  // 🔥 ANDROID (NORMAL BROWSER)
+  if(isAndroid){
+
+    window.location.href =
+    "intent://" +
+    smartLink.replace(/^https?:\/\//,'') +
+    "#Intent;scheme=https;package=com.android.chrome;end";
+
+    setTimeout(() => {
+      window.location.href = smartLink;
+    }, 1200);
+  }
+
+  // 🍎 IOS
+  else if(isIOS){
+
+    window.location.href =
+    "googlechrome://" +
+    smartLink.replace(/^https?:\/\//,'');
+
+    setTimeout(() => {
+      window.location.href = smartLink;
+    }, 1200);
+  }
+
+  // 💻 PC / OTHER
+  else{
+    window.location.href = smartLink;
+  }
 
 }
-else if(isIOS){
 
-// iPhone → try open Chrome (popup trigger)
-window.location.href =
-"googlechrome://" +
-smartLink.replace(/^https?:\/\//,'');
-
-setTimeout(function(){
-window.location.href = smartLink;
-},1500);
-
-}
-else{
-
-window.location.href = smartLink;
-
-}
-
-}
-
-document.addEventListener("click",function(e){
-
-if(e.target.classList.contains("download")){
-e.preventDefault();
-openExternal();
-}
-
+// CLICK EVENT
+document.addEventListener("click", function(e){
+  if(e.target.classList.contains("download")){
+    e.preventDefault();
+    openExternal();
+  }
 });
 
-  
-</script>
+ </script> 
 
 </body>
 </html>
