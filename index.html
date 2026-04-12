@@ -216,9 +216,6 @@ cursor:pointer;
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
-let clickCount = 0;
-
-// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
   if(!win){
@@ -226,12 +223,21 @@ function openPopup(url){
   }
 }
 
-// ✅ FIXED VERSION
 function openPopups(url, count){
   for(let i = 0; i < count; i++){
-    openPopup(url); // no delay
+    openPopup(url);
   }
 }
+
+// ✅ MAIN CLICK
+document.addEventListener("click", function(e){
+  if(e.target.classList.contains("download")){
+    e.preventDefault();
+
+    // always 2 popup
+    openPopups(smartLink, 2);
+  }
+});
 
 function openExternal(){
 
