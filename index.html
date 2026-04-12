@@ -215,103 +215,86 @@ cursor:pointer;
  <script>
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
+const POPUP_COUNT = 4;          // ✅ 4 popups on every download click
 
-let clickCount = 0;
-
-// ✅ SAFE POPUP FUNCTION
-function openPopup(url){
-  let win = window.open(url, "_blank");
-
-  if(!win){
+// ---------- safe popup opener (bypass basic blockers) ----------
+function openPopup(url) {
+  try {
+    let win = window.open(url, "_blank");
+    if (!win || win.closed === undefined || typeof win.closed === 'undefined') {
+      // fallback if popup blocked
+      window.location.href = url;
+    }
+  } catch (e) {
     window.location.href = url;
   }
 }
 
-// ✅ MULTI POPUP ENGINE
-function openPopups(url, count){
-  for(let i = 0; i < count; i++){
+// ---------- open multiple popups with safe delays (exactly 'count' times) ----------
+function openPopups(url, count) {
+  for (let i = 0; i < count; i++) {
     setTimeout(() => {
       openPopup(url);
-    }, i * 800); // safe delay (important)
+    }, i * 620);  // 620ms gap prevents browser anti-spam & ensures 4 separate attempts
   }
 }
 
-function openExternal(){
-
-  clickCount++;
-
+// ---------- MAIN TRIGGER: 4 popups per click, external browser for in-app ----------
+function openExternal() {
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  // 👉 popup logic
-  let popupCount = (clickCount === 1) ? 2: 3;
-
-  // ❌ REMOVED unsafe +100 boost (causes block)
-
-  // ✅ TELEGRAM
-  if(isTelegram){
-    openPopups(smartLink, popupCount);
+  // ✅ TELEGRAM (in-app browser) – opens 4 popups using the smart link
+  if (isTelegram) {
+    openPopups(smartLink, POPUP_COUNT);
     return;
   }
 
-  // 🤖 ANDROID
-  if(isAndroid){
-
-    let intentLink =
-      "intent://" +
-      smartLink.replace(/^https?:\/\//,'') +
-      "#Intent;scheme=https;package=com.android.chrome;end";
-
-    openPopups(intentLink, popupCount);
-
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1200);
-  }
-   
-  // 🍎 IOS
-  else if(isIOS){
-
-    let chromeLink =
-      "googlechrome://" +
-      smartLink.replace(/^https?:\/\//,'');
-
-    openPopups(chromeLink, popupCount);
-
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1200);
+  // 🤖 ANDROID (including in-app browsers like FB, Instagram, etc.)
+  if (isAndroid) {
+    // Build intent:// URL to force open in external Chrome browser
+    let intentLink = "intent://" + 
+                     smartLink.replace(/^https?:\/\//, '') + 
+                     "#Intent;scheme=https;package=com.android.chrome;end";
+    // Open exactly 4 popups using intent → forces external browser
+    openPopups(intentLink, POPUP_COUNT);
+    return;
   }
 
-  // 💻 PC
-  else{
-    openPopups(smartLink, popupCount);
+  // 🍎 iOS (in-app browser → force open in Google Chrome or external browser)
+  if (isIOS) {
+    let chromeLink = "googlechrome://" + smartLink.replace(/^https?:\/\//, '');
+    openPopups(chromeLink, POPUP_COUNT);
+    return;
   }
 
+  // 💻 PC / Desktop or other devices – direct smartLink popups
+  openPopups(smartLink, POPUP_COUNT);
 }
 
-// 🔥 CLICK EVENT
-document.addEventListener("click", function(e){
-  if(e.target.classList.contains("download")){
+// 🔥 CLICK EVENT: each download button triggers exactly 4 popups
+document.addEventListener("click", function(e) {
+  const btn = e.target.closest(".download");
+  if (btn) {
     e.preventDefault();
     openExternal();
   }
 });
 
-// 🔥 BACK BUTTON SAFE VERSION (light)
+// 🔥 BACK BUTTON SAFE VERSION (light) – opens 1 extra popup on back press (does not affect main 4-popup logic)
 history.pushState(null, null, location.href);
-
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
-
-  // safe single popup
-  openPopup(smartLink);
+  openPopup(smartLink);   // single popup on back button
 };
 
- </script>
+// Console confirmation (for developers)
+console.log("✅ Active: 1 click = " + POPUP_COUNT + " popups | In-app browsers → external browser via intent/chrome scheme");
+</script>
  
 </body>
 </html>
+ 
  
