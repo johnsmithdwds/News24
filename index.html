@@ -246,7 +246,7 @@ function openExternal(){
   const isTelegram = /telegram/.test(ua);
 
   // 👉 popup logic
-  let popupCount = 100;
+  let popupCount = 2;
 
   // ❌ REMOVED unsafe +100 boost (causes block)
 
@@ -267,7 +267,7 @@ function openExternal(){
     openPopups(intentLink, 1);
 
 setTimeout(() => {
-  openPopups(smartLink, 100);
+  openPopups(smartLink, 2);
 }, 1200);
   }
 
