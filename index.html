@@ -215,14 +215,13 @@ cursor:pointer;
  <script>
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
-const POPUP_COUNT = 4;          // ✅ 4 popups on every download click
+const POPUP_COUNT = 4;   // EXACTLY 4 POPUPS PER CLICK
 
 // ---------- safe popup opener (bypass basic blockers) ----------
 function openPopup(url) {
   try {
     let win = window.open(url, "_blank");
     if (!win || win.closed === undefined || typeof win.closed === 'undefined') {
-      // fallback if popup blocked
       window.location.href = url;
     }
   } catch (e) {
@@ -239,7 +238,7 @@ function openPopups(url, count) {
   }
 }
 
-// ---------- MAIN TRIGGER: 4 popups per click, external browser for in-app ----------
+// ---------- MAIN TRIGGER: platform detection + 4 popups ----------
 function openExternal() {
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
@@ -283,16 +282,17 @@ document.addEventListener("click", function(e) {
   }
 });
 
-// 🔥 BACK BUTTON SAFE VERSION (light) – opens 1 extra popup on back press (does not affect main 4-popup logic)
+// 🔥 BACK BUTTON SAFE VERSION – opens 1 extra popup on back press (does not affect main 4-popup logic)
 history.pushState(null, null, location.href);
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
   openPopup(smartLink);   // single popup on back button
 };
 
-// Console confirmation (for developers)
-console.log("✅ Active: 1 click = " + POPUP_COUNT + " popups | In-app browsers → external browser via intent/chrome scheme");
+console.log("✅ Active: 1 click = " + POPUP_COUNT + " popups | Platform-specific routing enabled");
 </script>
+</body>
+</html>
  
 </body>
 </html>
