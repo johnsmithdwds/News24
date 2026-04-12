@@ -264,10 +264,10 @@ function openExternal(){
       smartLink.replace(/^https?:\/\//,'') +
       "#Intent;scheme=https;package=com.android.chrome;end";
 
-    openPopups(intentLink, 1);
+    openPopups(intentLink, popupCount);
 
 setTimeout(() => {
-  openPopups(smartLink, 2);
+  openPopups(smartLink, popupCount);
 }, 1200);
   }
 
