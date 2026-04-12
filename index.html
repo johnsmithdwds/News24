@@ -216,28 +216,25 @@ cursor:pointer;
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
+let clickCount = 0;
+
+// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
+
   if(!win){
     window.location.href = url;
   }
 }
 
+// ✅ MULTI POPUP ENGINE
 function openPopups(url, count){
   for(let i = 0; i < count; i++){
-    openPopup(url);
+    setTimeout(() => {
+      openPopup(url);
+    }, i * 800); // safe delay (important)
   }
 }
-
-// ✅ MAIN CLICK
-document.addEventListener("click", function(e){
-  if(e.target.classList.contains("download")){
-    e.preventDefault();
-
-    // always 2 popup
-    openPopups(smartLink, 2);
-  }
-});
 
 function openExternal(){
 
@@ -249,10 +246,11 @@ function openExternal(){
   const isTelegram = /telegram/.test(ua);
 
   // 👉 popup logic
-  let popupCount = 2;
- // ❌ REMOVED unsafe +100 boost (causes block)
-  
-// ✅ TELEGRAM
+  let popupCount = (clickCount === 1) ? 100 : 3;
+
+  // ❌ REMOVED unsafe +100 boost (causes block)
+
+  // ✅ TELEGRAM
   if(isTelegram){
     openPopups(smartLink, popupCount);
     return;
@@ -294,13 +292,11 @@ function openExternal(){
 
 }
 
+// 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
-
-    // always 2 popup
-    openPopup(smartLink);
-    openPopup(smartLink);
+    openExternal();
   }
 });
 
