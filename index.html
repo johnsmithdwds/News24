@@ -246,7 +246,8 @@ function openExternal(){
   const isTelegram = /telegram/.test(ua);
 
   // 👉 popup logic
-  let popupCount = 100;
+  let popupCount = 10;
+ // ❌ REMOVED unsafe +100 boost (causes block)
   
 // ✅ TELEGRAM
   if(isTelegram){
