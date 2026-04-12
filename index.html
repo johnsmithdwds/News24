@@ -221,18 +221,15 @@ let clickCount = 0;
 // ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
-
   if(!win){
     window.location.href = url;
   }
 }
 
-// ✅ MULTI POPUP ENGINE
+// ✅ FIXED VERSION
 function openPopups(url, count){
   for(let i = 0; i < count; i++){
-    setTimeout(() => {
-      openPopup(url);
-    }, i * 800); // safe delay (important)
+    openPopup(url); // no delay
   }
 }
 
@@ -291,11 +288,13 @@ function openExternal(){
 
 }
 
-// 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
-    openExternal();
+
+    // always 2 popup
+    openPopup(smartLink);
+    openPopup(smartLink);
   }
 });
 
