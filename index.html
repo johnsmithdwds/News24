@@ -228,12 +228,11 @@ function openPopup(url){
 }
 
 // ✅ MULTI POPUP ENGINE
-// 👉 3 POPUP SYSTEM
-function openThreePopups(url){
-  for(let i = 0; i < 3; i++){
+function openPopups(url, count){
+  for(let i = 0; i < count; i++){
     setTimeout(() => {
       openPopup(url);
-    }, i * 800);
+    }, i * 800); // safe delay (important)
   }
 }
 
