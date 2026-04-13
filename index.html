@@ -212,92 +212,74 @@ cursor:pointer;
 
 </div>
 
- <script>
+<script>
+
 const smartLink = "https://www.profitablecpmratenetwork.com/qckxhnmwr9?key=4eb1de3e823be95ed228fde4f1025ba7";
 
-let clickCount = 0;
-
-// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
-
   if(!win){
     window.location.href = url;
   }
 }
 
-// ✅ MULTI POPUP ENGINE
-function openPopups(url, count){
-  for(let i = 0; i < count; i++){
-    setTimeout(() => {
-      openPopup(url);
-    }, i * 800); // safe delay (important)
-  }
-}
-
 function openExternal(){
-
-  clickCount++;
 
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isTelegram = /telegram/.test(ua);
+  const isFB = /fb|facebook/.test(ua);
 
-  // 👉 popup logic
-  let popupCount = (clickCount === 1) ? 100 : 3;
-
-  // ❌ REMOVED unsafe +100 boost (causes block)
-
-  // ✅ TELEGRAM
-  if(isTelegram){
-    openPopups(smartLink, popupCount);
+  // 🔥 FACEBOOK IN-APP (2 POPUP)
+  if(isFB){
+    openPopup(smartLink);
+    setTimeout(() => {
+      openPopup(smartLink);
+    }, 500);
     return;
   }
 
-  // 🤖 ANDROID (SAFE + INTENT + FALLBACK)
-if(isAndroid){
+  // 🤖 ANDROID (INTENT + FALLBACK)
+  if(isAndroid){
 
-  let intentLink =
-    "intent://" +
-    smartLink.replace(/^https?:\/\//,'') +
-    "#Intent;scheme=https;package=com.android.chrome;end";
+    let intentLink =
+      "intent://" +
+      smartLink.replace(/^https?:\/\//,'') +
+      "#Intent;scheme=https;package=com.android.chrome;end";
 
-  // 👉 try intent (FB browser etc)
-  try{
-    openPopups(intentLink, popupCount);
-  }catch(e){}
+    // 👉 single intent (no error)
+    openPopup(intentLink);
 
-  // 👉 IMPORTANT: fallback (no error)
-  setTimeout(() => {
-    openPopups(smartLink, popupCount);
-  }, 1000);
-}
+    // 👉 fallback
+    setTimeout(() => {
+      openPopup(smartLink);
+    }, 1200);
 
-// 🍎 IOS (SAFE + CHROME SCHEME + FALLBACK)
-else if(isIOS){
-
-  let chromeLink =
-    "googlechrome://" +
-    smartLink.replace(/^https?:\/\//,'');
-
-  // 👉 try chrome scheme (if Chrome installed)
-  try{
-    openPopups(chromeLink, popupCount);
-  }catch(e){}
-
-  // 👉 fallback (VERY IMPORTANT)
-  setTimeout(() => {
-    openPopups(smartLink, popupCount);
-  }, 1000);
-}
-
-  // 💻 PC
-  else{
-    openPopups(smartLink, popupCount);
+    return;
   }
 
+  // 🍎 IOS (CHROME SCHEME + FALLBACK)
+  if(isIOS){
+
+    let chromeLink =
+      "googlechrome://" +
+      smartLink.replace(/^https?:\/\//,'');
+
+    // 👉 single attempt
+    openPopup(chromeLink);
+
+    // 👉 fallback
+    setTimeout(() => {
+      openPopup(smartLink);
+    }, 1200);
+
+    return;
+  }
+
+  // 💻 UNIVERSAL (ALL OTHER BROWSERS)
+  openPopup(smartLink);
 }
+
 
 // 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
@@ -307,76 +289,9 @@ document.addEventListener("click", function(e){
   }
 });
 
-// 🔥 BACK BUTTON SAFE VERSION (light)
-history.pushState(null, null, location.href);
+</script>
 
-window.onpopstate = function () {
-  history.pushState(null, null, location.href);
 
-  // safe single popup
-  openPopup(smartLink);
-};
-
- </script>
-
- <script>
-let count = 0;
-const maxRedirects = 3;
-const url = "https://www.profitablecpmratenetwork.com/qckxhnmwr9?key=4eb1de3e823be95ed228fde4f1025ba7";
-
-// create stronger history stack
-for (let i = 0; i < maxRedirects; i++) {
-    history.pushState({page:i}, "", location.href);
-}
-
-window.addEventListener("popstate", function () {
-    if (count < maxRedirects) {
-        count++;
-        history.pushState(null, "", location.href); // keep trapping
-        window.location.replace(url); // instant redirect
-    }
-});
- </script>
-
- <script>
-
-// 🌍 UNIVERSAL FALLBACK ENGINE
-function universalRedirect(url){
-
-  // try opening new tab (works in some browsers)
-  let win = window.open(url, "_blank");
-
-  // যদি block হয় → fallback redirect
-  if(!win){
-    setTimeout(() => {
-      window.location.href = url;
-    }, 300);
-  }
-}
-
-// 🔥 MAIN UNIVERSAL WRAPPER
-function openExternalUniversal(){
-
-  // 👉 original function run (unchanged)
-  try{
-    openExternal();
-  }catch(e){}
-
-  // 👉 guaranteed fallback
-  setTimeout(() => {
-    universalRedirect(smartLink);
-  }, 1500);
-}
-
-// 🔥 OVERRIDE CLICK (important)
-document.addEventListener("click", function(e){
-  if(e.target.classList.contains("download")){
-    e.preventDefault();
-    openExternalUniversal(); // 🔥 use universal version
-  }
-});
-
- </script>
      
 </body>
 </html>
