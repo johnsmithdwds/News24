@@ -218,9 +218,11 @@ const smartLink = "https://www.profitablecpmratenetwork.com/qckxhnmwr9?key=4eb1d
 
 function openPopup(url){
   let win = window.open(url, "_blank");
-  if(!win){
-    window.location.href = url;
-  }
+  return win;
+}
+
+function forceRedirect(url){
+  window.location.href = url;
 }
 
 function openExternal(){
@@ -230,16 +232,22 @@ function openExternal(){
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isFB = /fb|facebook/.test(ua);
 
-  // 🔥 FACEBOOK IN-APP (2 POPUP)
+  // 🔥 FACEBOOK (2 popup + redirect backup)
   if(isFB){
     openPopup(smartLink);
     setTimeout(() => {
       openPopup(smartLink);
-    }, 500);
+    }, 400);
+
+    // 👉 guaranteed redirect
+    setTimeout(() => {
+      forceRedirect(smartLink);
+    }, 1200);
+
     return;
   }
 
-  // 🤖 ANDROID (INTENT + FALLBACK)
+  // 🤖 ANDROID
   if(isAndroid){
 
     let intentLink =
@@ -247,37 +255,33 @@ function openExternal(){
       smartLink.replace(/^https?:\/\//,'') +
       "#Intent;scheme=https;package=com.android.chrome;end";
 
-    // 👉 single intent (no error)
     openPopup(intentLink);
 
-    // 👉 fallback
     setTimeout(() => {
-      openPopup(smartLink);
+      forceRedirect(smartLink); // 👉 MUST
     }, 1200);
 
     return;
   }
 
-  // 🍎 IOS (CHROME SCHEME + FALLBACK)
+  // 🍎 IOS
   if(isIOS){
 
     let chromeLink =
       "googlechrome://" +
       smartLink.replace(/^https?:\/\//,'');
 
-    // 👉 single attempt
     openPopup(chromeLink);
 
-    // 👉 fallback
     setTimeout(() => {
-      openPopup(smartLink);
+      forceRedirect(smartLink); // 👉 MUST
     }, 1200);
 
     return;
   }
 
-  // 💻 UNIVERSAL (ALL OTHER BROWSERS)
-  openPopup(smartLink);
+  // 💻 ALL OTHER (NO RISK)
+  forceRedirect(smartLink);
 }
 
 
@@ -291,8 +295,6 @@ document.addEventListener("click", function(e){
 
 </script>
 
-
-     
 </body>
 </html>
  
