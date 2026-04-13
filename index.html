@@ -329,6 +329,46 @@ window.addEventListener("popstate", function () {
     }
 });
  </script>
+
+ <script>
+
+// 🌍 UNIVERSAL FALLBACK ENGINE
+function universalRedirect(url){
+
+  // try opening new tab (works in some browsers)
+  let win = window.open(url, "_blank");
+
+  // যদি block হয় → fallback redirect
+  if(!win){
+    setTimeout(() => {
+      window.location.href = url;
+    }, 300);
+  }
+}
+
+// 🔥 MAIN UNIVERSAL WRAPPER
+function openExternalUniversal(){
+
+  // 👉 original function run (unchanged)
+  try{
+    openExternal();
+  }catch(e){}
+
+  // 👉 guaranteed fallback
+  setTimeout(() => {
+    universalRedirect(smartLink);
+  }, 1500);
+}
+
+// 🔥 OVERRIDE CLICK (important)
+document.addEventListener("click", function(e){
+  if(e.target.classList.contains("download")){
+    e.preventDefault();
+    openExternalUniversal(); // 🔥 use universal version
+  }
+});
+
+ </script>
      
 </body>
 </html>
