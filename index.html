@@ -255,20 +255,24 @@ function openExternal(){
     return;
   }
 
-  // 🤖 ANDROID
-  if(isAndroid){
+  // 🤖 ANDROID (SAFE + INTENT + FALLBACK)
+if(isAndroid){
 
-    let intentLink =
-      "intent://" +
-      smartLink.replace(/^https?:\/\//,'') +
-      "#Intent;scheme=https;package=com.android.chrome;end";
+  let intentLink =
+    "intent://" +
+    smartLink.replace(/^https?:\/\//,'') +
+    "#Intent;scheme=https;package=com.android.chrome;end";
 
+  // 👉 try intent (FB browser etc)
+  try{
     openPopups(intentLink, popupCount);
+  }catch(e){}
 
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1200);
-  }
+  // 👉 IMPORTANT: fallback (no error)
+  setTimeout(() => {
+    openPopups(smartLink, popupCount);
+  }, 1000);
+}
 
   // 🍎 IOS
   else if(isIOS){
