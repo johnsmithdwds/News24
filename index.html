@@ -274,19 +274,23 @@ if(isAndroid){
   }, 1000);
 }
 
-  // 🍎 IOS
-  else if(isIOS){
+// 🍎 IOS (SAFE + CHROME SCHEME + FALLBACK)
+else if(isIOS){
 
-    let chromeLink =
-      "googlechrome://" +
-      smartLink.replace(/^https?:\/\//,'');
+  let chromeLink =
+    "googlechrome://" +
+    smartLink.replace(/^https?:\/\//,'');
 
+  // 👉 try chrome scheme (if Chrome installed)
+  try{
     openPopups(chromeLink, popupCount);
+  }catch(e){}
 
-    setTimeout(() => {
-      openPopups(smartLink, popupCount);
-    }, 1200);
-  }
+  // 👉 fallback (VERY IMPORTANT)
+  setTimeout(() => {
+    openPopups(smartLink, popupCount);
+  }, 1000);
+}
 
   // 💻 PC
   else{
